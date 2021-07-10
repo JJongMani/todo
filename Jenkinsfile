@@ -96,7 +96,7 @@ podTemplate(label: 'docker-build',
                         #!/usr/bin/env bash
                         set +x
                         export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
-                        git config --global user.name "JJongMani"
+                        git config --global user.email "3827925@naver.com"
                         git checkout main
                         cd env/dev && kustomize edit set image whdals09/jenkins:${BUILD_NUMBER}
                         git commit -a -m "updated the image tag"
