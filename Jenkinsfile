@@ -30,8 +30,8 @@ podTemplate(label: 'docker-build',
         stage('Checkout'){
             git (
                 branch: 'master',
-                credentialsId: 'heyKim',
-                url: 'https://github.com/heyKim/todo.git'
+                credentialsId: 'JJongMani',
+                url: 'https://github.com/JJongMani/todo.git'
             )
         }
         
@@ -49,7 +49,7 @@ podTemplate(label: 'docker-build',
         stage('Build'){
             container('docker'){
                 script {
-                    appImage = docker.build("jkk3366/jenkins")
+                    appImage = docker.build("whdals09/jenkins")
                 }
             }
         }
