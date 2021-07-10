@@ -18,6 +18,12 @@ podTemplate(label: 'docker-build',
         command: 'cat',
         ttyEnabled: true
     )
+    containerTemplate(
+      name: 'argo',
+      image: 'argoproj/argo-cd-ci-builder:latest',
+      command: 'cat',
+      ttyEnabled: true
+    ),
   ],
   volumes: [ 
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
@@ -70,6 +76,32 @@ podTemplate(label: 'docker-build',
                         appImage.push("${env.BUILD_NUMBER}")
                         appImage.push("latest")
                     }
+                }
+            }
+        }
+
+
+        stage('Deploy'){
+            container('argo'){
+                checkout([$class: 'GitSCM',
+                        branches: [[name: '*/main' ]],
+                        extensions: scm.extensions,
+                        userRemoteConfigs: [[
+                            url: 'git@github.com:JJongMani/todo-resource.git',
+                            credentialsId: 'Jenkins-ssh-private',
+                        ]]
+                ])
+                sshagent(credentials: ['Jenkins-ssh-private']){
+                    sh("""
+                        #!/usr/bin/env bash
+                        set +x
+                        export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                        git config --global user.name "JJongMani"
+                        git checkout main
+                        cd env/dev && kustomize edit set image whdals09/jenkins:${BUILD_NUMBER}
+                        git commit -a -m "updated the image tag"
+                        git push
+                    """)
                 }
             }
         }
