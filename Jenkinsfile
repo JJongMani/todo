@@ -17,7 +17,7 @@ podTemplate(label: 'docker-build',
         image: 'gradle:7.1.0-jdk11',
         command: 'cat',
         ttyEnabled: true
-    )
+    ),
     containerTemplate(
       name: 'argo',
       image: 'argoproj/argo-cd-ci-builder:latest',
