@@ -24,7 +24,7 @@ podTemplate(label: 'docker-build',
   ]
 ) {
     node('docker-build') {
-        def dockerHubCred = "docker_hub_id"
+        def dockerHubCred = "dockerhub-jjm-id"
         def appImage
         
         stage('Checkout'){
